@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-3">
+                <div class="card shadow-sm p-3" style="width: 18rem;">
+                    <div class="card-header">
+                        Category
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        {% for category in categories %}
+                            <li class="list-group-item"><a style="text-decoration: none"
+                                                           href="/?category={{ category.name }}">{{ category.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-9">
+                <div>
+                    <div class="row">
+                        <div class="mb-3 input-group-lg">
+                            <input type="text" class="form-control" id="searchbar"
+                                   placeholder="Search Products">
+                        </div>
+                        <div id="box" class="row">
+                            {% for item in object_list %}
+                                <div class="col-sm-6">
+                                    <div class="card shadow-sm p-3 mb-5 bg-white rounded">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ item.title }}</h5>
+                                            <p class="card-text"><b>Price: </b>{{ item.price }}</p>
+                                            <a href="{{ item.get_add_to_cart_url }}" class="btn btn-sm btn-primary">Add
+                                                to
+                                                cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block script %}
+    <script>
+        const data = '{{qs_json}}'
+        const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
+        const input = document.getElementById('searchbar')
+        let filteredArr = []
+
+        input.addEventListener('keyup', (e) => {
+            box.innerHTML = ""
+            filteredArr = rdata.filter(info => info['title'].includes(e.target.value))
+            console.log(filteredArr)
+            if (filteredArr.length > 0) {
+                filteredArr.map(info => {
+                    box.innerHTML += `<div class="col-sm-6">
+                                    <div class="card shadow-sm p-3 mb-5 bg-white rounded">
+                                        <div class="card-body">
+                                            <h5 class="card-title">${info['title']}</h5>
+                                            <p class="card-text"><b>Price: </b>${info['price']}</p>
+                                            <a href="#" class="btn btn-sm btn-primary">Add
+                                                to
+                                                cart</a>
+                                        </div>
+                                    </div>
+                                </div>`
+                })
+            } else {
+                box.innerHTML = `<div class="alert alert-danger" role="alert">
+                                      No Products Found !
+                                  </div>`
+            }
+        })
+
+    </script>
+{% endblock %}

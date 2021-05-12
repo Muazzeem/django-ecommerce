@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load qr_code %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card shadow-sm p-3 mt-3">
+                    <div class="card-body text-center">
+                        {% qr_for_contact contact_detail size='S' %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="card shadow-sm p-3 mt-3">
+                    <div class="card-header">
+                        <a href="/pdf_download" class="btn btn-primary">pdf download</a>
+                    </div>
+                    <table class="table table-striped" style="border-collapse: separate;border-spacing:0 20px;">
+                        <thead>
+                        <tr>
+                            <th>SL.NO</th>
+                            <th>Item</th>
+                            <th>QTY</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for order_item in order.items.all %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ order_item.item.title }}</td>
+                                <td>{{ order_item.quantity }}</td>
+                                <td>{{ order_item.item.price }}</td>
+                                <td>{{ order_item.get_total_item_price }}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="4" class="table-disable">Total Amount</td>
+                            <td>{{ order.get_total }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

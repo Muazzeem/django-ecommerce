@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <main>
+        {% if price %}
+            <div class="container bg-white">
+                <h2 class="mt-5 mb-5 h2 text-center">Checkout form</h2>
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags %}
+                            <script>alert("{{ message }}")</script> {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <div class="row">
+                    <div class="col-md-8 mb-4">
+                        <div class="card border-0">
+                            <form method="POST">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email address</label>
+                                    <input type="email" name="email" class="form-control" id="email"
+                                           aria-describedby="emailHelp">
+                                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="text" name="phone" class="form-control" id="phone">
+                                </div>
+                                <button type="submit" class="btn btn-primary float-right">Confirm Order</button>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        {% include "order_snippet.html" %}
+                    </div>
+
+                </div>
+                {% else %}
+                <div class="container">
+                    <div class="alert alert-danger mt-5" role="alert">
+                        A simple danger alert—check it out!
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+{% endblock extra_scripts %}

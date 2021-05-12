@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+
+        <div>
+            <div class="table-responsive p-4 text-nowrap bg-white">
+                <h2>Order Summary</h2>
+                <table class="table table-striped" style="border-collapse: separate;border-spacing:0 20px;">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Item title</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total Item Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order_item in products %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ order_item.item.title }}</td>
+                            <td>{{ order_item.item.price }}</td>
+                            <td>
+                                <a href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><i
+                                        class="fas fa-minus mr-2"></i></a>
+                                {{ order_item.quantity }}
+                                <a href="{% url 'core:add-to-cart' order_item.item.slug %}"><i
+                                        class="fas fa-plus ml-5"></i></a>
+                            </td>
+                            <td>
+                                {{ order_item.get_total_item_price }}
+                                <a style='color: red;'
+                                   href="{% url 'core:remove-from-cart' order_item.item.slug %}">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan='5'>Your cart is empty</td>
+                        </tr>
+                    {% endfor %}
+                    {% if products %}
+                        <tr>
+                            <td colspan="5">
+                                <a class='btn btn-sm btn-warning float-right ml-2' href='/checkout/'>Proceed to
+                                    checkout</a>
+                                <a class='btn btn-sm btn-primary float-right' href='/'>Continue shopping</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
